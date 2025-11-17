@@ -97,6 +97,13 @@ export default function CVPage() {
   ]
 
   const experiences = [
+      {
+      title: "CEO & Founder",
+      company: "JK.Shinske",
+      period: "Apr 2020",
+      description:
+        "Since 2020, I have independently built and led a Mobile Legends jockey service, starting from a small operation and growing it into a service trusted by many players. I am responsible for operational management, jockey team management, marketing strategy development, and ensuring consistent service quality and customer safety. This experience has shaped my skills in business management, client management, strategic decision-making, and a deep understanding of the esports ecosystem and player behavior.",
+    },
     {
       title: "Staff of Porsenigama UGM 2025",
       company: "IT Division",

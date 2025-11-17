@@ -23,15 +23,17 @@ import {
   Volume2, 
   VolumeX, 
   RotateCcw, // Ikon Repeat
+  Briefcase, // Ikon untuk Work Experience
+  BookOpen,  // Ikon untuk Training
+  Users,     // Ikon untuk Committee
+  BookOpenCheck, // Ikon untuk Education
 } from "lucide-react"
 
 export default function CVPage() {
   // === HANYA MENGGUNAKAN SATU ID VIDEO ===
-  // Ganti ID ini dengan video yang Anda inginkan
   const YOUTUBE_VIDEO_ID = "Sx5wp4J_oVc"; 
   
   // === STATE DAN REF UNTUK KONTROL AUDIO ===
-  // True = Muted (Implisit: Pause). Musik mulai dalam keadaan Mute dan Pause.
   const [isMuted, setIsMuted] = useState(true) 
   const playerRef = useRef<HTMLIFrameElement>(null)
   // ===============================================
@@ -67,13 +69,11 @@ export default function CVPage() {
   // === FUNGSI REPLAY TRACK (Ulang dari Awal) ===
   const replayCurrentTrack = () => {
       if (playerRef.current) {
-          // Perintah untuk memindahkan posisi video ke detik ke-0 (seekTo(0))
           playerRef.current.contentWindow?.postMessage(
               `{"event":"command","func":"seekTo","args":[0, true]}`,
               "*",
           )
           
-          // Setelah replay, pastikan lagu diputar (jika tidak mute)
           if (!isMuted) {
                playerRef.current.contentWindow?.postMessage(
                   `{"event":"command","func":"playVideo","args":[]}`,
@@ -105,7 +105,6 @@ export default function CVPage() {
     // Listener Pesan YouTube untuk Mengaktifkan Kontrol
     const onYouTubeIframeAPIReady = () => {
         if (playerRef.current) {
-             // Set volume 0 saat player siap (sesuai state awal isMuted = true)
              playerRef.current.contentWindow?.postMessage(
                 `{"event":"command","func":"setVolume","args":[0]}`, 
                 "*",
@@ -142,7 +141,7 @@ export default function CVPage() {
     }
   }
 
-  // --- DATA TETAP SAMA ---
+  // --- DATA KEMAMPUAN, PROYEK, DAN PORTOFOLIO ---
   const skills = [
     { name: "React", level: 95, icon: <Code className="w-5 h-5" />, color: "from-blue-600 to-blue-800" },
     { name: "Node.js", level: 90, icon: <Server className="w-5 h-5" />, color: "from-blue-700 to-indigo-700" },
@@ -153,92 +152,134 @@ export default function CVPage() {
     { name: "React Native", level: 75, icon: <Smartphone className="w-5 h-5" />, color: "from-blue-500 to-indigo-600" },
     { name: "Express.js", level: 87, icon: <Server className="w-5 h-5" />, color: "from-blue-700 to-indigo-700" },
   ]
+  
+  // NOTE: Data 'projects' dihapus karena diganti Education
 
-  const projects = [
+  // --- DATA PENGALAMAN KERJA (DARI GAMBAR CV) ---
+  const workExperiences = [
     {
-      title: "E-Commerce Platform",
-      description: "Full-stack e-commerce solution dengan React, Node.js, dan PostgreSQL",
-      tech: ["React", "Node.js", "PostgreSQL", "Stripe"],
-      link: "https://github.com/shinosuke/ecommerce-platform",
-    },
-    {
-      title: "Task Management App",
-      description: "Aplikasi manajemen tugas real-time dengan fitur kolaborasi",
-      tech: ["Next.js", "Socket.io", "MongoDB", "Tailwind"],
-      link: "https://github.com/shinosuke/task-management-app",
-    },
-    {
-      title: "API Gateway Service",
-      description: "Microservices API gateway dengan rate limiting dan authentication",
-      tech: ["Node.js", "Redis", "Docker", "JWT"],
-      link: "https://github.com/shinosuke/api-gateway-service",
-    },
-    {
-      title: "Mobile Banking App",
-      description: "Aplikasi mobile banking dengan fitur keamanan tinggi",
-      tech: ["React Native", "Firebase", "Biometric", "Redux"],
-      link: "https://github.com/shinosuke/mobile-banking-app",
-    },
-  ]
-
-  const experiences = [
-      {
       title: "CEO & Founder",
       company: "JK.Shinske",
       period: "Apr 2020",
-      description:
-        "Since 2020, I have independently built and led a Mobile Legends jockey service, starting from a small operation and growing it into a service trusted by many players. I am responsible for operational management, jockey team management, marketing strategy development, and ensuring consistent service quality and customer safety. This experience has shaped my skills in business management, client management, strategic decision-making, and a deep understanding of the esports ecosystem and player behavior.",
+      description: "Since 2020, I have independently built and led a Mobile Legends joki service, starting from small operations to becoming a trusted service for many players. Responsible for operational management, joki team, marketing strategies, and ensuring consistent service quality. This experience shaped my skills in business management, client relations, strategic decision-making, and deep understanding of the esports ecosystem.",
+      logo: "/jkshinske-logo.png" 
     },
     {
-      title: "Staff of Porsenigama UGM 2025",
-      company: "IT Division",
+      title: "Project Manager",
+      company: "Toko Roti Wunoasari",
       period: "Aug 2025",
-      description:
-        "Worked as IT division staff for Porsenigama UGM 2025, managing technical operations and digital systems.",
+      description: "Employed as a project manager for a bakery located in the Wunoasari area.",
+      logo: "/lion-logo.png"
+    },
+    {
+      title: "Full Stack Developer",
+      company: "PT. Lion Wings Indonesia",
+      period: "Sept 2025",
+      description: "Worked on developing a special website for admin purposes.",
+      logo: "/lion-logo.png"
     },
     {
       title: "Sub Dealer",
       company: "PT. Samsung Electronics Indonesia",
       period: "Jul 2025",
-      description:
-        "At that time, I had the experience of being invited to a VIP gathering at a Singapore restaurant for the launch of the Samsung Galaxy Z Fold 7 | Z Flip 7.",
-    },
-    {
-      title: "Staff of Paskah UGM 2025",
-      company: "HumpubIT Division",
-      period: "May 2025",
-      description:
-        "Served as staff member in the IT division for Paskah UGM 2025, handling technical aspects and digital infrastructure.",
+      description: "Invited to attend a VIP meeting at a Singapore restaurant for the launch of Samsung Galaxy Z Fold 7 | Z Flip 7.",
+      logo: "/samsung-logo.png"
     },
     {
       title: "Sub Dealer",
       company: "PT. Candii Jitu Indonesia",
       period: "May 2025",
-      description:
-        "I received an invitation to attend the Toshiba gathering event held at the Ballroom of Swissbell Hotel Solo.",
+      description: "Received an invitation to attend the Toshiba gathering event held at Ballroom Swissbell Hotel Solo.",
+      logo: "/candii-jitu-logo.png"
     },
     {
       title: "Sub Dealer",
-      company: "PT. Haier Sales Indonesia",
+      company: "PT. Haier Group",
       period: "Jan 2024 - Jul 2025",
-      description: "I attended several series of gathering events with VIP invitations.",
+      description: "Attended several VIP invitation gathering events.",
+      logo: "/haier-logo.png"
     },
+  ];
+
+  // --- DATA PELATIHAN & KURSUS (DARI GAMBAR CV) ---
+  const trainingAndCourses = [
     {
-      title: "Member of Komatik UGM 2024",
+      title: "IT Multimedia",
+      company: "Humas UGM",
+      period: "Sept 2025",
+      description: "Participated in various trainings and courses in the UGM Public Relations Department, specifically in Multimedia. Topics included visual communication management, digital media, photography, videography, graphic design, and event documentation. This experience enhanced my skills in design, creative processes, and using technology for institutional information and branding.",
+    },
+  ];
+
+  // --- DATA PENGALAMAN KOMITE (DARI GAMBAR CV) ---
+  const committeeExperiences = [
+    {
+      title: "Member of Komatik UGM",
       company: "Software Research Development Division",
       period: "Nov 2024",
-      description:
-        "Active member in the Software Research Development Division of Komatik UGM, focusing on software innovation and research projects.",
+      description: "Active member of the Software Research Development Division at Komatik UGM, focusing on software innovation and research projects.",
+    },
+    {
+      title: "Staff of Paskah UGM",
+      company: "HumpubIT Division",
+      period: "May 2025",
+      description: "Served as staff in the HumpubIT Division for Paskah UGM, handling public relations and digital infrastructure aspects.",
     },
     {
       title: "Staff of NEX x SRE UGM Policy Case Competition",
-      company: "Multimedia & Documentation",
-      period: "14 Aug 2024",
-      description:
-        "Participated as staff member in the NEX x SRE UGM Policy Case Competition, contributing to event organization and management.",
+      company: "Multimedia & Documentation Division",
+      period: "Aug 2025",
+      description: "Participated as staff in the NEX x SRE UGM Policy Case Competition, contributing to event organization and multimedia documentation.",
     },
-  ]
+    {
+      title: "Staff of Porsenigama UGM",
+      company: "IT Division",
+      period: "Aug 2025",
+      description: "Worked as staff in the IT Division for Porsenigama UGM, managing technical operations and digital systems."
+    },
+    {
+      title: "Event Support Inauguration of Professor",
+      company: "IT Multimedia",
+      period: "Sept 2025",
+      description: "Provided IT Multimedia support for the professor inauguration event.",
+    },
+    {
+      title: "Event Support UKM Swagayugama",
+      company: "IT Multimedia",
+      period: "Oct 2025",
+      description: "Provided IT Multimedia support for the Swagayugama student activity unit event.",
+    },
+    {
+      title: "Event Support the 16th Anniversary of UGM Vocational",
+      company: "IT Multimedia",
+      period: "Oct 2025",
+      description: "Provided IT Multimedia support for the 16th Anniversary of UGM Vocational.",
+    },
+    {
+      title: "Event Support UGM Graduation",
+      company: "IT Multimedia",
+      period: "Nov 2025",
+      description: "Provided IT and Multimedia support for the UGM graduation event.",
+    },
+  ];
+  
+  // --- DATA BARU: EDUCATION (DARI GAMBAR CV) ---
+  const education = [
+    {
+      school: "Gadjah Mada University",
+      major: "Software Engineering",
+      period: "Juni 2021 - Mei 2024",
+      description: "Currently pursuing a degree in Software Engineering, focusing on full-stack development, database management, and system architecture. Actively participating in campus organizations and independent projects to gain practical skills."
+    },
+    {
+      school: "SMA NEGERI 1 TUBAN",
+      major: "Science",
+      period: "Apr 2018 - Jan 2020",
+      description: "Graduated with honors, participated actively in science clubs and extracurricular activities."
+    },
+  ];
 
+  // === DATA PORTOFOLIO (YANG SEBELUMNYA HILANG/BELUM ADA) ===
   const portfolioItems = [
     {
       title: "University Portal System",
@@ -270,7 +311,8 @@ export default function CVPage() {
     },
   ]
   // --- AKHIR DATA ---
-
+  
+  // ... (JSX dimulai) ...
 
   return (
     <div className="min-h-screen bg-background transition-colors duration-500 custom-cursor-wrapper">
@@ -283,7 +325,6 @@ export default function CVPage() {
         <div className="fixed bottom-0 right-0 z-[0] w-[1px] h-[1px] opacity-0 overflow-hidden pointer-events-none">
             <iframe 
                ref={playerRef} 
-               // URL untuk satu lagu, dengan loop dan API
                src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?enablejsapi=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}`} 
                title="YouTube background music player" 
                width="1" 
@@ -306,8 +347,6 @@ export default function CVPage() {
       </div>
 
       {/* FIXED BUTTONS - TEMA DAN KONTROL MUSIK */}
-      
-      {/* Tombol Theme Toggle tetap di kanan atas */}
       <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
       </div>
@@ -338,8 +377,9 @@ export default function CVPage() {
         </Button>
       </div>
 
-      <Navigation activeSection={activeSection} onSectionClick={scrollToSection} />
+      <Navigation activeSection={activeSection} onSectionClick={scrollToSection} /> 
 
+      {/* SECTION HOME (Tidak Berubah) */}
       <section
         id="home"
         className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-accent/5 to-background py-16 px-4 min-h-screen flex items-center"
@@ -477,10 +517,10 @@ export default function CVPage() {
                   variant="outline"
                   size="lg"
                   className="gap-2 bg-transparent hover:scale-105 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
-                  onClick={() => scrollToSection("projects")}
+                  onClick={() => scrollToSection("portfolio")}
                 >
                   <Code className="w-4 h-4" />
-                  View Projects
+                  View Portfolio
                 </Button>
               </div>
             </div>
@@ -488,6 +528,7 @@ export default function CVPage() {
         </div>
       </section>
 
+      {/* SECTION ABOUT (Tidak Berubah) */}
       <section id="about" className="py-16 sm:py-20 px-4">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12 sm:mb-16">
@@ -547,6 +588,7 @@ export default function CVPage() {
         </div>
       </section>
 
+      {/* SECTION SKILLS (Tidak Berubah) */}
       <section id="skills" className="py-16 sm:py-20 px-4 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12 sm:mb-16">
@@ -596,23 +638,25 @@ export default function CVPage() {
         </div>
       </section>
 
-      <section id="experience" className="py-20 px-4">
+      {/* SECTION BARU: PENGALAMAN KERJA */}
+      <section id="work" className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Work & Committee Experience</h2>
-            <p className="text-muted-foreground text-lg">My professional journey</p>
+            <Briefcase className="w-8 h-8 mx-auto mb-3 text-primary" />
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Work Experience</h2>
+            <p className="text-muted-foreground text-lg">My professional journey in the industry</p>
           </div>
 
           <div className="space-y-8">
-            {experiences.map((exp, index) => (
+            {workExperiences.map((exp, index) => (
               <Card
                 key={`${exp.title}-${index}`}
                 className={`hover:shadow-lg transition-all duration-300 hover:scale-[1.01] ${
-                  visibleElements.has(`experience-${index}`) ? "animate-fly-in-up" : "translate-x-[-50px] opacity-0"
+                  visibleElements.has(`work-${index}`) ? "animate-fly-in-up" : "translate-x-[-50px] opacity-0"
                 }`}
                 style={{ animationDelay: `${index * 200}ms` }}
-                data-animate={`experience-${index}`}
-                id={`experience-${index}`}
+                data-animate={`work-${index}`}
+                id={`work-${index}`}
               >
                 <CardContent className="p-8">
                   <div className="grid lg:grid-cols-4 gap-6">
@@ -632,53 +676,36 @@ export default function CVPage() {
         </div>
       </section>
 
-      <section id="projects" className="py-20 px-4 bg-muted/30">
+      {/* SECTION BARU: PELATIHAN & KURSUS */}
+      <section id="training" className="py-20 px-4 bg-muted/30">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Featured Projects</h2>
-            <p className="text-muted-foreground text-lg">Some of my recent work</p>
+            <BookOpen className="w-8 h-8 mx-auto mb-3 text-primary" />
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Training & Courses</h2>
+            <p className="text-muted-foreground text-lg">Structured learning and certification</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {projects.map((project, index) => (
+          <div className="space-y-8">
+            {trainingAndCourses.map((exp, index) => (
               <Card
-                key={project.title}
-                className={`group hover:shadow-xl transition-all duration-300 hover:scale-[1.02] ${
-                  visibleElements.has(`project-${index}`) ? "animate-fly-in-up" : "translate-y-8 opacity-0"
+                key={`${exp.title}-${index}`}
+                className={`hover:shadow-lg transition-all duration-300 hover:scale-[1.01] ${
+                  visibleElements.has(`training-${index}`) ? "animate-fly-in-up" : "translate-x-50px opacity-0"
                 }`}
                 style={{ animationDelay: `${index * 200}ms` }}
-                data-animate={`project-${index}`}
-                id={`project-${index}`}
+                data-animate={`training-${index}`}
+                id={`training-${index}`}
               >
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <CardTitle className="group-hover:text-primary transition-colors duration-300">
-                      {project.title}
-                    </CardTitle>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-105 hover:bg-primary hover:text-primary-foreground"
-                      asChild
-                    >
-                      <a href={project.link} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                    </Button>
-                  </div>
-                  <CardDescription className="text-pretty">{project.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tech.map((tech) => (
-                      <Badge
-                        key={tech}
-                        variant="outline"
-                        className="text-xs hover:scale-105 hover:bg-accent hover:text-accent-foreground transition-all duration-200"
-                      >
-                        {tech}
-                      </Badge>
-                    ))}
+                <CardContent className="p-8">
+                  <div className="grid lg:grid-cols-4 gap-6">
+                    <div className="lg:col-span-1">
+                      <div className="text-sm text-muted-foreground mb-2">{exp.period}</div>
+                      <div className="font-semibold text-primary">{exp.company}</div>
+                    </div>
+                    <div className="lg:col-span-3">
+                      <h3 className="text-xl font-bold mb-3">{exp.title}</h3>
+                      <p className="text-muted-foreground text-pretty">{exp.description}</p>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -687,6 +714,83 @@ export default function CVPage() {
         </div>
       </section>
 
+      {/* SECTION BARU: PENGALAMAN KOMITE */}
+      <section id="committee" className="py-20 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <Users className="w-8 h-8 mx-auto mb-3 text-primary" />
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Committee Experience</h2>
+            <p className="text-muted-foreground text-lg">My organizational and event involvement</p>
+          </div>
+
+          <div className="space-y-8">
+            {committeeExperiences.map((exp, index) => (
+              <Card
+                key={`${exp.title}-${index}`}
+                className={`hover:shadow-lg transition-all duration-300 hover:scale-[1.01] ${
+                  visibleElements.has(`committee-${index}`) ? "animate-fly-in-up" : "translate-x-[-50px] opacity-0"
+                }`}
+                style={{ animationDelay: `${index * 200}ms` }}
+                data-animate={`committee-${index}`}
+                id={`committee-${index}`}
+              >
+                <CardContent className="p-8">
+                  <div className="grid lg:grid-cols-4 gap-6">
+                    <div className="lg:col-span-1">
+                      <div className="text-sm text-muted-foreground mb-2">{exp.period}</div>
+                      <div className="font-semibold text-primary">{exp.company}</div>
+                    </div>
+                    <div className="lg:col-span-3">
+                      <h3 className="text-xl font-bold mb-3">{exp.title}</h3>
+                      <p className="text-muted-foreground text-pretty">{exp.description}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION BARU: EDUCATION (Menggantikan Featured Projects) */}
+      <section id="education" className="py-20 px-4 bg-muted/30">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <BookOpenCheck className="w-8 h-8 mx-auto mb-3 text-primary" />
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Education</h2>
+            <p className="text-muted-foreground text-lg">My academic background</p>
+          </div>
+
+          <div className="space-y-8">
+            {education.map((edu, index) => (
+              <Card
+                key={edu.school}
+                className={`hover:shadow-lg transition-all duration-300 hover:scale-[1.01] ${
+                  visibleElements.has(`education-${index}`) ? "animate-fly-in-up" : "translate-y-8 opacity-0"
+                }`}
+                style={{ animationDelay: `${index * 200}ms` }}
+                data-animate={`education-${index}`}
+                id={`education-${index}`}
+              >
+                <CardContent className="p-8">
+                  <div className="grid lg:grid-cols-4 gap-6">
+                    <div className="lg:col-span-1">
+                      <div className="text-sm text-muted-foreground mb-2">{edu.period}</div>
+                      <div className="font-semibold text-primary">{edu.major}</div>
+                    </div>
+                    <div className="lg:col-span-3">
+                      <h3 className="text-xl font-bold mb-3">{edu.school}</h3>
+                      <p className="text-muted-foreground text-pretty">{edu.description}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION PORTFOLIO (Dipindahkan ke bawah Education) */}
       <section id="portfolio" className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
@@ -764,6 +868,7 @@ export default function CVPage() {
         </div>
       </section>
 
+      {/* SECTION CONTACT (Tidak Berubah) */}
       <section id="contact" className="py-20 px-4 bg-gradient-to-br from-primary/5 to-accent/5">
         <div className="container mx-auto max-w-4xl text-center">
           <div

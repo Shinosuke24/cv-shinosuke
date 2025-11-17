@@ -17,8 +17,8 @@ export function Navigation({ activeSection, onSectionClick }: NavigationProps) {
     { id: "home", label: "Home" },
     { id: "about", label: "About Me" },
     { id: "skills", label: "Skills" },
-    { id: "experience", label: "Experience" },
-    { id: "projects", label: "Projects" },
+    { id: "work", label: "Experience" }, 
+    { id: "education", label: "Education" },
     { id: "portfolio", label: "Portfolio" },
     { id: "contact", label: "Contact" },
   ]
@@ -54,7 +54,7 @@ export function Navigation({ activeSection, onSectionClick }: NavigationProps) {
               key={section.id}
               variant={activeSection === section.id ? "default" : "ghost"}
               size="sm"
-              className="rounded-full hover:scale-105 transition-all duration-200 text-sm px-3 py-1"
+              className="rounded-full hover:scale-105 transition-all duration-200 text-sm px-4 py-2"
               onClick={() => handleSectionClick(section.id)}
             >
               {section.label}

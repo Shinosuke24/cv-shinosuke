@@ -308,7 +308,7 @@ export default function CVPage() {
                   }`}
                   asChild
                 >
-                  <a href="https://github.com/shinosuke" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/Shinosuke24" target="_blank" rel="noopener noreferrer">
                     <Github className="w-3 h-3 sm:w-4 sm:h-4" />
                     GitHub
                   </a>

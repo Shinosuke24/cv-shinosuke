@@ -428,11 +428,6 @@ export default function CVPage() {
                   <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
                   Gadjah Mada University
                 </p>
-                <p className="text-base sm:text-lg text-muted-foreground text-pretty">
-                  I am a student of UGM  majoring in Software Engineering, with a great interest in
-                  programming and technology. I am actively learning through various online sources such as YouTube, and
-                  am currently looking for practical experience to prepare myself for the industrial world.
-                </p>
               </div>
 
               <div

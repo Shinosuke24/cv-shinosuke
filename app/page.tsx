@@ -20,15 +20,20 @@ import {
   User,
   GraduationCap,
   MapPin,
-  Music, 
   Volume2, 
   VolumeX, 
+  Play, 
+  Pause, 
+  RotateCcw, // Ikon Repeat
 } from "lucide-react"
 
 export default function CVPage() {
-  // === STATE DAN REF BARU UNTUK KONTROL AUDIO ===
-  const [isMuted, setIsMuted] = useState(true) // Mulai selalu dalam keadaan mute
-  const [isPlaying, setIsPlaying] = useState(false) // Mulai dalam keadaan pause secara fungsional
+  // === HANYA MENGGUNAKAN SATU ID VIDEO ===
+  const YOUTUBE_VIDEO_ID = "Sx5wp4J_oVc"; 
+  
+  // === STATE DAN REF UNTUK KONTROL AUDIO ===
+  const [isMuted, setIsMuted] = useState(true) 
+  const [isPlaying, setIsPlaying] = useState(false)
   const playerRef = useRef<HTMLIFrameElement>(null)
   // ===============================================
 
@@ -37,36 +42,15 @@ export default function CVPage() {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const [visibleElements, setVisibleElements] = useState<Set<string>>(new Set())
 
-  // ID VIDEO YOUTUBE SUDAH DIPERBARUI: Tenxi, Jemsii - Bintang 5 (Lirik)
-  const YOUTUBE_VIDEO_ID = "Sx5wp4J_oVc"; 
-
-  // === FUNGSI KONTROL AUDIO BARU ===
+  // === FUNGSI KONTROL MUTE/UNMUTE ===
   const toggleMute = () => {
-    // Tombol ini berfungsi ganda: Play/Pause/Mute/Unmute
-    
-    // 1. Jika belum pernah dimainkan, paksa putar
-    if (!isPlaying) {
-      // Tombol pertama kali ditekan, putar musik
-      togglePlayPause();
-      // Kemudian, lanjutkan dengan toggle mute
-      setIsMuted((prev) => {
-        const newMutedState = !prev
-        if (playerRef.current) {
-          playerRef.current.contentWindow?.postMessage(
-            `{"event":"command","func":"setVolume","args":[${newMutedState ? 0 : 100}]}`,
-            "*",
-          )
-        }
-        return newMutedState
-      })
-      return; // Stop di sini setelah memicu play dan mute
+    if (!isPlaying && playerRef.current) {
+      togglePlayPause(); // Panggil play agar browser mengizinkan perubahan volume
     }
 
-    // 2. Jika sudah dimainkan, hanya toggle mute
     setIsMuted((prev) => {
       const newMutedState = !prev
       if (playerRef.current) {
-        // Mengirim perintah 'mute' atau 'unmute' ke iframe YouTube
         playerRef.current.contentWindow?.postMessage(
           `{"event":"command","func":"setVolume","args":[${newMutedState ? 0 : 100}]}`,
           "*",
@@ -76,26 +60,52 @@ export default function CVPage() {
     })
   }
 
+  // === FUNGSI KONTROL PLAY/PAUSE ===
   const togglePlayPause = () => {
     setIsPlaying((prev) => {
         const newPlayingState = !prev;
         if (playerRef.current) {
-            // Mengirim perintah 'playVideo' atau 'pauseVideo'
             const command = newPlayingState ? "playVideo" : "pauseVideo";
             playerRef.current.contentWindow?.postMessage(
                 `{"event":"command","func":"${command}","args":[]}`,
                 "*",
             );
+            
+            if (newPlayingState && !isMuted) {
+                playerRef.current.contentWindow?.postMessage(
+                    `{"event":"command","func":"setVolume","args":[100]}`,
+                    "*",
+                );
+            }
         }
         return newPlayingState;
     });
   };
+  
+  // === FUNGSI REPLAY TRACK (Ulang dari Awal) ===
+  const replayCurrentTrack = () => {
+      if (playerRef.current) {
+          // Perintah untuk memindahkan posisi video ke detik ke-0 (seekTo(0))
+          playerRef.current.contentWindow?.postMessage(
+              `{"event":"command","func":"seekTo","args":[0, true]}`,
+              "*",
+          )
+          
+          // Pastikan lagu berlanjut diputar
+          if (isPlaying) {
+               playerRef.current.contentWindow?.postMessage(
+                  `{"event":"command","func":"playVideo","args":[]}`,
+                  "*",
+              );
+          }
+      }
+  }
   // ===================================
 
   useEffect(() => {
     setIsVisible(true)
 
-    // Logika Observer (Tetap Sama)
+    // Logika Observer
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -110,34 +120,35 @@ export default function CVPage() {
     const elements = document.querySelectorAll("[data-animate]")
     elements.forEach((el) => observerRef.current?.observe(el))
 
-    // === Listener Pesan YouTube untuk Mengaktifkan Kontrol ===
+    // Listener Pesan YouTube untuk Mengaktifkan Kontrol
     const onYouTubeIframeAPIReady = () => {
         if (playerRef.current) {
+             // Set volume 0 saat player siap
              playerRef.current.contentWindow?.postMessage(
-                `{"event":"command","func":"setVolume","args":[0]}`, // Set volume 0 saat player siap
+                `{"event":"command","func":"setVolume","args":[0]}`, 
                 "*",
             )
         }
     };
 
-    window.addEventListener("message", (event) => {
+    const handleMessage = (event: MessageEvent) => {
         if (event.origin === "https://www.youtube.com") {
-             // YouTube Player API mengirim string JSON saat event 'onReady'
              try {
                 const data = JSON.parse(event.data);
                 if (data.event === 'onReady') {
                     onYouTubeIframeAPIReady();
                 }
              } catch (e) {
-                 // Handle non-JSON messages if necessary, though unlikely for API
+                 // Ignore non-JSON messages
              }
         }
-    });
-    // =========================================================
+    };
 
+    window.addEventListener("message", handleMessage);
+    
     return () => {
       observerRef.current?.disconnect()
-      // window.removeEventListener("message", ...); // Cleanup
+      window.removeEventListener("message", handleMessage); 
     }
   }, [])
 
@@ -149,6 +160,7 @@ export default function CVPage() {
     }
   }
 
+  // --- DATA TETAP SAMA ---
   const skills = [
     { name: "React", level: 95, icon: <Code className="w-5 h-5" />, color: "from-blue-600 to-blue-800" },
     { name: "Node.js", level: 90, icon: <Server className="w-5 h-5" />, color: "from-blue-700 to-indigo-700" },
@@ -275,23 +287,24 @@ export default function CVPage() {
       link: "https://github.com/shinosuke/iot-dashboard",
     },
   ]
+  // --- AKHIR DATA ---
+
 
   return (
-    // PENTING: Tambahkan class 'custom-cursor-wrapper' di div terluar
     <div className="min-h-screen bg-background transition-colors duration-500 custom-cursor-wrapper">
       
       {/* 1. EFEK VISUAL: CURSOR FOLLOWER KEREN (PLASMA BLOB) */}
       <CursorFollower />
       
       {/* 2. MUSIK LATAR TERSEMBUNYI (YOUTUBE EMBED) */}
-      {YOUTUBE_VIDEO_ID && ( // Hanya render jika ID Video tersedia
+      {YOUTUBE_VIDEO_ID && ( 
         <div className="fixed bottom-0 right-0 z-[0] w-[1px] h-[1px] opacity-0 overflow-hidden pointer-events-none">
             <iframe 
-               ref={playerRef} // Tambahkan ref di sini
-               // Tambahkan enablejsapi=1 agar bisa dikontrol via postMessage
+               ref={playerRef} 
+               // URL kembali ke satu lagu, dengan loop dan API
                src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?enablejsapi=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}`} 
                title="YouTube background music player" 
-               width="1" // Ukuran sangat kecil
+               width="1" 
                height="1"
                allow="autoplay; encrypted-media; gyroscope;" 
                frameBorder="0"
@@ -311,17 +324,42 @@ export default function CVPage() {
       </div>
 
       {/* FIXED BUTTONS - TEMA DAN KONTROL MUSIK */}
+      
       {/* Tombol Theme Toggle tetap di kanan atas */}
       <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
       </div>
 
-      {/* Tombol Kontrol Musik Dipindah ke Kiri Navigasi, agar sejajar logo/awal header */}
-      <div className="fixed top-4 left-20 z-50"> 
+      {/* Kontrol Musik di Kiri Navigasi - HANYA 3 TOMBOL */}
+      <div className="fixed top-4 left-20 z-50 flex space-x-2"> 
+         
+         {/* TOMBOL PLAY/PAUSE */}
          <Button 
-            variant="ghost" // Mengubahnya menjadi 'ghost' agar terlihat lebih menyatu dengan background
+            variant="ghost" 
             size="icon" 
-            onClick={toggleMute}
+            onClick={togglePlayPause} 
+            className="hover:scale-110 transition-transform duration-200"
+            title={isPlaying ? "Pause Music" : "Play Music"}
+        >
+            {isPlaying ? <Pause className="w-5 h-5 text-primary" /> : <Play className="w-5 h-5" />}
+        </Button>
+        
+        {/* TOMBOL REPLAY / REPEAT CURRENT TRACK */}
+         <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={replayCurrentTrack} 
+            className="hover:scale-110 transition-transform duration-200"
+            title="Replay Current Track"
+        >
+            <RotateCcw className="w-5 h-5" />
+        </Button>
+         
+         {/* TOMBOL MUTE/UNMUTE */}
+         <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleMute} 
             className="hover:scale-110 transition-transform duration-200"
             title={isMuted ? "Unmute Music" : "Mute Music"}
         >

@@ -282,11 +282,11 @@ export default function CVPage() {
   // === DATA PORTOFOLIO (YANG SEBELUMNYA HILANG/BELUM ADA) ===
   const portfolioItems = [
     {
-      title: "University Portal System",
-      description: "Sistem portal mahasiswa dengan fitur akademik lengkap",
-      image: "/university-portal-dashboard.png",
-      tech: ["React", "Express", "MySQL"],
-      link: "https://github.com/shinosuke/university-portal",
+      title: "Lion Wings Indonesia",
+      description: "Development of an admin website for managing products and orders",
+      image: "/lionwings.png",
+      tech: ["TypeScript", "JavaScipt", "CSS"],
+      link: "https://github.com/Shinosuke24/pt-lion-wings-stock-system.git",
     },
     {
       title: "Restaurant Management",

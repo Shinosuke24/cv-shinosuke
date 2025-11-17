@@ -258,12 +258,6 @@ export default function CVPage() {
       period: "Juni 2021 - Mei 2024",
       description: "Currently pursuing a degree in Software Engineering, focusing on full-stack development, database management, and system architecture. Actively participating in campus organizations and independent projects to gain practical skills."
     },
-    {
-      school: "SMA NEGERI 1 TUBAN",
-      major: "Science",
-      period: "Apr 2018 - Jan 2020",
-      description: "Graduated with honors, participated actively in science clubs and extracurricular activities."
-    },
   ];
 
   // === DATA PORTOFOLIO (YANG SEBELUMNYA HILANG/BELUM ADA) ===
@@ -854,7 +848,7 @@ export default function CVPage() {
       <footer className="py-6 sm:py-8 px-4 border-t">
         <div className="container mx-auto max-w-6xl text-center">
           <p className="text-muted-foreground text-xs sm:text-sm">
-            © 2025 Shinosuke Alexander. Built with Next.js and Tailwind CSS.
+            © 2025 Shinosuke Alexander.
           </p>
         </div>
       </footer>

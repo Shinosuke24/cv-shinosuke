@@ -452,7 +452,7 @@ export default function CVPage() {
       <section id="experience" className="py-20 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Work Experience</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Work & Commite Experience</h2>
             <p className="text-muted-foreground text-lg">My professional journey</p>
           </div>
 

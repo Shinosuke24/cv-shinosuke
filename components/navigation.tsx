@@ -16,7 +16,6 @@ export function Navigation({ activeSection, onSectionClick }: NavigationProps) {
   const sections = [
     { id: "home", label: "Home" },
     { id: "about", label: "About Me" },
-    { id: "skills", label: "Skills" },
     { id: "work", label: "Experience" }, 
     { id: "education", label: "Education" },
     { id: "portfolio", label: "Portfolio" },

@@ -141,19 +141,6 @@ export default function CVPage() {
     }
   }
 
-  // --- DATA KEMAMPUAN, PROYEK, DAN PORTOFOLIO ---
-  const skills = [
-    { name: "React", level: 95, icon: <Code className="w-5 h-5" />, color: "from-blue-600 to-blue-800" },
-    { name: "Node.js", level: 90, icon: <Server className="w-5 h-5" />, color: "from-blue-700 to-indigo-700" },
-    { name: "TypeScript", level: 88, icon: <Code className="w-5 h-5" />, color: "from-indigo-600 to-blue-700" },
-    { name: "PostgreSQL", level: 85, icon: <Database className="w-5 h-5" />, color: "from-blue-800 to-indigo-800" },
-    { name: "Next.js", level: 92, icon: <Code className="w-5 h-5" />, color: "from-slate-700 to-blue-900" },
-    { name: "MongoDB", level: 80, icon: <Database className="w-5 h-5" />, color: "from-blue-600 to-indigo-600" },
-    { name: "React Native", level: 75, icon: <Smartphone className="w-5 h-5" />, color: "from-blue-500 to-indigo-600" },
-    { name: "Express.js", level: 87, icon: <Server className="w-5 h-5" />, color: "from-blue-700 to-indigo-700" },
-  ]
-  
-  // NOTE: Data 'projects' dihapus karena diganti Education
 
   // --- DATA PENGALAMAN KERJA (DARI GAMBAR CV) ---
   const workExperiences = [
@@ -580,56 +567,6 @@ export default function CVPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
-      </section>
-
-      {/* SECTION SKILLS (Tidak Berubah) */}
-      <section id="skills" className="py-16 sm:py-20 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center mb-12 sm:mb-16">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4">Technical Skills</h2>
-            <p className="text-muted-foreground text-base sm:text-lg">Technologies I work with</p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {skills.map((skill, index) => (
-              <Card
-                key={skill.name}
-                className={`hover:shadow-lg transition-all duration-200 hover:scale-[1.02] group ${
-                  visibleElements.has("skills-grid") ? "animate-fly-in-up" : "translate-y-8 opacity-0"
-                }`}
-                style={{ animationDelay: `${index * 100}ms` }}
-                data-animate="skills-grid"
-                id={index === 0 ? "skills-grid" : undefined}
-              >
-                <CardContent className="p-4 sm:p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div
-                      className={`p-2 bg-gradient-to-br ${skill.color} rounded-lg text-white group-hover:scale-110 transition-transform duration-200 animate-auto-float`}
-                      style={{ animationDelay: `${index * 0.3}s` }}
-                    >
-                      {skill.icon}
-                    </div>
-                    <h3 className="font-semibold group-hover:text-primary transition-colors duration-200 text-sm sm:text-base">
-                      {skill.name}
-                    </h3>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-xs sm:text-sm">
-                      <span>Proficiency</span>
-                      <span className="font-semibold">{skill.level}%</span>
-                    </div>
-                    <div className="w-full bg-muted rounded-full h-2 overflow-hidden">
-                      <div
-                        className={`bg-gradient-to-r ${skill.color} h-2 rounded-full transition-all duration-1000 ease-out animate-shimmer`}
-                        style={{ width: isVisible ? `${skill.level}%` : "0%" }}
-                      ></div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
         </div>
       </section>
 

@@ -5,7 +5,7 @@ import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'shinosuke-portofolio',
+  title: 'shino-project',
   description: 'Created by Shinosuke',
   generator: 'app',
 }

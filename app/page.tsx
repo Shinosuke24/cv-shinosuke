@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Navigation } from "@/components/navigation"
-import { CursorFollower } from "@/components/cursor-follower" // 
+import { CursorFollower } from "@/components/cursor-follower" 
 import {
   Github,
   Linkedin,
@@ -20,17 +20,82 @@ import {
   User,
   GraduationCap,
   MapPin,
+  Music, 
+  Volume2, 
+  VolumeX, 
 } from "lucide-react"
 
 export default function CVPage() {
+  // === STATE DAN REF BARU UNTUK KONTROL AUDIO ===
+  const [isMuted, setIsMuted] = useState(true) // Mulai selalu dalam keadaan mute
+  const [isPlaying, setIsPlaying] = useState(false) // Mulai dalam keadaan pause secara fungsional
+  const playerRef = useRef<HTMLIFrameElement>(null)
+  // ===============================================
+
   const [isVisible, setIsVisible] = useState(false)
   const [activeSection, setActiveSection] = useState("home")
   const observerRef = useRef<IntersectionObserver | null>(null)
   const [visibleElements, setVisibleElements] = useState<Set<string>>(new Set())
 
+  // ID VIDEO YOUTUBE SUDAH DIPERBARUI: Tenxi, Jemsii - Bintang 5 (Lirik)
+  const YOUTUBE_VIDEO_ID = "Sx5wp4J_oVc"; 
+
+  // === FUNGSI KONTROL AUDIO BARU ===
+  const toggleMute = () => {
+    // Tombol ini berfungsi ganda: Play/Pause/Mute/Unmute
+    
+    // 1. Jika belum pernah dimainkan, paksa putar
+    if (!isPlaying) {
+      // Tombol pertama kali ditekan, putar musik
+      togglePlayPause();
+      // Kemudian, lanjutkan dengan toggle mute
+      setIsMuted((prev) => {
+        const newMutedState = !prev
+        if (playerRef.current) {
+          playerRef.current.contentWindow?.postMessage(
+            `{"event":"command","func":"setVolume","args":[${newMutedState ? 0 : 100}]}`,
+            "*",
+          )
+        }
+        return newMutedState
+      })
+      return; // Stop di sini setelah memicu play dan mute
+    }
+
+    // 2. Jika sudah dimainkan, hanya toggle mute
+    setIsMuted((prev) => {
+      const newMutedState = !prev
+      if (playerRef.current) {
+        // Mengirim perintah 'mute' atau 'unmute' ke iframe YouTube
+        playerRef.current.contentWindow?.postMessage(
+          `{"event":"command","func":"setVolume","args":[${newMutedState ? 0 : 100}]}`,
+          "*",
+        )
+      }
+      return newMutedState
+    })
+  }
+
+  const togglePlayPause = () => {
+    setIsPlaying((prev) => {
+        const newPlayingState = !prev;
+        if (playerRef.current) {
+            // Mengirim perintah 'playVideo' atau 'pauseVideo'
+            const command = newPlayingState ? "playVideo" : "pauseVideo";
+            playerRef.current.contentWindow?.postMessage(
+                `{"event":"command","func":"${command}","args":[]}`,
+                "*",
+            );
+        }
+        return newPlayingState;
+    });
+  };
+  // ===================================
+
   useEffect(() => {
     setIsVisible(true)
 
+    // Logika Observer (Tetap Sama)
     observerRef.current = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -45,8 +110,34 @@ export default function CVPage() {
     const elements = document.querySelectorAll("[data-animate]")
     elements.forEach((el) => observerRef.current?.observe(el))
 
+    // === Listener Pesan YouTube untuk Mengaktifkan Kontrol ===
+    const onYouTubeIframeAPIReady = () => {
+        if (playerRef.current) {
+             playerRef.current.contentWindow?.postMessage(
+                `{"event":"command","func":"setVolume","args":[0]}`, // Set volume 0 saat player siap
+                "*",
+            )
+        }
+    };
+
+    window.addEventListener("message", (event) => {
+        if (event.origin === "https://www.youtube.com") {
+             // YouTube Player API mengirim string JSON saat event 'onReady'
+             try {
+                const data = JSON.parse(event.data);
+                if (data.event === 'onReady') {
+                    onYouTubeIframeAPIReady();
+                }
+             } catch (e) {
+                 // Handle non-JSON messages if necessary, though unlikely for API
+             }
+        }
+    });
+    // =========================================================
+
     return () => {
       observerRef.current?.disconnect()
+      // window.removeEventListener("message", ...); // Cleanup
     }
   }, [])
 
@@ -189,9 +280,27 @@ export default function CVPage() {
     // PENTING: Tambahkan class 'custom-cursor-wrapper' di div terluar
     <div className="min-h-screen bg-background transition-colors duration-500 custom-cursor-wrapper">
       
-      {/* PENTING: Render komponen CursorFollower Anda di sini */}
+      {/* 1. EFEK VISUAL: CURSOR FOLLOWER KEREN (PLASMA BLOB) */}
       <CursorFollower />
       
+      {/* 2. MUSIK LATAR TERSEMBUNYI (YOUTUBE EMBED) */}
+      {YOUTUBE_VIDEO_ID && ( // Hanya render jika ID Video tersedia
+        <div className="fixed bottom-0 right-0 z-[0] w-[1px] h-[1px] opacity-0 overflow-hidden pointer-events-none">
+            <iframe 
+               ref={playerRef} // Tambahkan ref di sini
+               // Tambahkan enablejsapi=1 agar bisa dikontrol via postMessage
+               src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?enablejsapi=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}`} 
+               title="YouTube background music player" 
+               width="1" // Ukuran sangat kecil
+               height="1"
+               allow="autoplay; encrypted-media; gyroscope;" 
+               frameBorder="0"
+               allowFullScreen
+            ></iframe>
+        </div>
+      )}
+      
+      {/* BACKGROUND ANIMASI */}
       <div className="animated-background"></div>
       <div className="floating-shapes">
         <div className="floating-shape"></div>
@@ -201,9 +310,25 @@ export default function CVPage() {
         <div className="floating-shape"></div>
       </div>
 
+      {/* FIXED BUTTONS - TEMA DAN KONTROL MUSIK */}
+      {/* Tombol Theme Toggle tetap di kanan atas */}
       <div className="fixed top-4 right-4 z-50">
         <ThemeToggle />
       </div>
+
+      {/* Tombol Kontrol Musik Dipindah ke Kiri Navigasi, agar sejajar logo/awal header */}
+      <div className="fixed top-4 left-20 z-50"> 
+         <Button 
+            variant="ghost" // Mengubahnya menjadi 'ghost' agar terlihat lebih menyatu dengan background
+            size="icon" 
+            onClick={toggleMute}
+            className="hover:scale-110 transition-transform duration-200"
+            title={isMuted ? "Unmute Music" : "Mute Music"}
+        >
+            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5 text-primary" />}
+        </Button>
+      </div>
+
       <Navigation activeSection={activeSection} onSectionClick={scrollToSection} />
 
       <section

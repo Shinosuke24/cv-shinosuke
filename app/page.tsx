@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Navigation } from "@/components/navigation"
+import { CursorFollower } from "@/components/cursor-follower" // 
 import {
   Github,
   Linkedin,
@@ -178,7 +179,12 @@ export default function CVPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-background transition-colors duration-500">
+    // PENTING: Tambahkan class 'custom-cursor-wrapper' di div terluar
+    <div className="min-h-screen bg-background transition-colors duration-500 custom-cursor-wrapper">
+      
+      {/* PENTING: Render komponen CursorFollower Anda di sini */}
+      <CursorFollower />
+      
       <div className="animated-background"></div>
       <div className="floating-shapes">
         <div className="floating-shape"></div>
@@ -293,7 +299,7 @@ export default function CVPage() {
                   }`}
                   asChild
                 >
-                  <a href="mailto:dragonoidangels@gmail.com">
+                  <a href="mailto:shinosuke675@gmail.com">
                     <Mail className="w-3 h-3 sm:w-4 sm:h-4" />
                     Gmail
                   </a>
@@ -635,9 +641,9 @@ export default function CVPage() {
 
             <div className="flex justify-center gap-6 flex-wrap">
               <Button size="lg" className="gap-2 hover:scale-105 transition-all duration-300 animate-glow" asChild>
-                <a href="mailto:dragonoidangels@gmail.com">
+                <a href="mailto:shinosuke675@gmail.com">
                   <Mail className="w-5 h-5" />
-                  dragonoidangels@gmail.com
+                 shinosuke675@gmail.com
                 </a>
               </Button>
               <Button
@@ -670,7 +676,7 @@ export default function CVPage() {
       <footer className="py-6 sm:py-8 px-4 border-t">
         <div className="container mx-auto max-w-6xl text-center">
           <p className="text-muted-foreground text-xs sm:text-sm">
-            © 2024 Shinosuke Alexander. Built with Next.js and Tailwind CSS.
+            © 2025 Shinosuke Alexander. Built with Next.js and Tailwind CSS.
           </p>
         </div>
       </footer>

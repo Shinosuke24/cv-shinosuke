@@ -3,6 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* --- 1. SKEMA WARNA: LIGHT MODE (Midnight Blue) --- */
 :root {
   /* Updated to midnight blue elegant color scheme */
   --background: #ffffff;
@@ -13,12 +14,14 @@
   --popover-foreground: #1e293b;
   --primary: #1e3a8a; /* Midnight blue primary */
   --primary-foreground: #ffffff;
+  --primary-rgb: 30, 58, 138; /* Ditambahkan untuk box-shadow */
   --secondary: #3730a3; /* Deep blue accent */
   --secondary-foreground: #ffffff;
   --muted: #f1f5f9;
   --muted-foreground: #64748b;
   --accent: #312e81; /* Midnight blue accent */
   --accent-foreground: #ffffff;
+  --accent-rgb: 49, 46, 129; /* Ditambahkan untuk box-shadow */
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
   --border: #e2e8f0;
@@ -40,6 +43,7 @@
   --sidebar-ring: rgba(30, 58, 138, 0.3);
 }
 
+/* --- 1. SKEMA WARNA: DARK MODE --- */
 .dark {
   /* Updated dark mode with midnight blue theme */
   --background: #0f172a;
@@ -50,12 +54,14 @@
   --popover-foreground: #f1f5f9;
   --primary: #3b82f6; /* Lighter midnight blue for dark mode */
   --primary-foreground: #0f172a;
+  --primary-rgb: 59, 130, 246; /* Ditambahkan untuk box-shadow */
   --secondary: #475569;
   --secondary-foreground: #f1f5f9;
   --muted: #334155;
   --muted-foreground: #94a3b8;
   --accent: #4338ca;
   --accent-foreground: #f1f5f9;
+  --accent-rgb: 67, 56, 202; /* Ditambahkan untuk box-shadow */
   --destructive: #ef4444;
   --destructive-foreground: #f1f5f9;
   --border: #334155;
@@ -129,7 +135,7 @@
   }
 }
 
-/* Updated custom animations for CV */
+/* --- 2. KEYFRAMES ANIMASI KUSTOM --- */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -183,7 +189,6 @@
   }
 }
 
-/* Enhanced animations for sophisticated CV */
 @keyframes subtleBounceIn {
   0% {
     opacity: 0;
@@ -261,7 +266,6 @@
   }
 }
 
-/* Enhanced bounce animation with more noticeable effect */
 @keyframes enhancedBounceIn {
   0% {
     opacity: 0;
@@ -281,7 +285,6 @@
   }
 }
 
-/* Enhanced hover bounce with more visible movement */
 @keyframes enhancedHover {
   0%,
   100% {
@@ -295,7 +298,6 @@
   }
 }
 
-/* Simplified scroll animations to be more like modern widgets */
 @keyframes widgetFadeIn {
   from {
     opacity: 0;
@@ -602,7 +604,7 @@
   background: rgba(59, 130, 246, 0.15);
 }
 
-/* Responsive utilities for better mobile experience */
+/* --- 3. RESPONSIVE DAN KURANGI ANIMASI DI MOBILE --- */
 @media (max-width: 768px) {
   .animate-bounce-hover:hover {
     animation: none;
@@ -627,7 +629,6 @@
     transform: none;
   }
 
-  /* Keep floating animations enabled on mobile/tablet */
   .animate-auto-float {
     animation: autoFloat 4s ease-in-out infinite;
   }
@@ -644,7 +645,6 @@
     animation: gentleBob 3s ease-in-out infinite;
   }
 
-  /* Keep animated background on mobile but make it more subtle */
   .animated-background {
     animation: gradientShift 20s ease infinite;
   }
@@ -652,4 +652,63 @@
   .floating-shapes {
     display: block;
   }
+}
+
+/* --- 4. CSS CURSOR FOLLOWER MEWAH (WAJIB ADA!) --- */
+/* PENTING: Untuk menyembunyikan kursor asli pada perangkat desktop */
+@media (min-width: 768px) {
+    .custom-cursor-wrapper {
+        cursor: none !important;
+    }
+}
+
+/* Styling untuk elemen follower (Default State) */
+.cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  
+  /* Tampilan Default */
+  width: 15px; 
+  height: 15px;
+  background-color: var(--primary); 
+  border-radius: 50%;
+  opacity: 0.8;
+  
+  /* EFEK GLOW AMAN MENGGUNAKAN RGB (Mewah) */
+  box-shadow: 
+    0 0 5px rgba(var(--primary-rgb), 0.8), 
+    0 0 15px rgba(var(--primary-rgb), 0.3); 
+  
+  filter: blur(1px);
+  
+  /* PENTING: Pusat kursor */
+  transform: translate(-50%, -50%); 
+  pointer-events: none; 
+  
+  /* Transisi yang lebih cepat untuk efek 'mengekor' yang responsif */
+  transition: 
+    transform 0.08s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+    width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+    height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+    opacity 0.2s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Styling saat follower berada di atas elemen interaktif (Hover State) */
+.cursor-follower.interactive-hover {
+  width: 55px;
+  height: 55px;
+  opacity: 0.9;
+  
+  background-color: var(--accent);
+  
+  /* EFEK GLOW LEBIH KUAT SAAT HOVER */
+  box-shadow: 
+    0 0 10px rgba(var(--accent-rgb), 1), 
+    0 0 25px rgba(var(--accent-rgb), 0.6),
+    0 0 40px rgba(var(--accent-rgb), 0.3);
+    
+  mix-blend-mode: exclusion; 
 }

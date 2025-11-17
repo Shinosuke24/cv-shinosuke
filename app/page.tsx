@@ -608,7 +608,7 @@ export default function CVPage() {
               className="gap-2 hover:scale-105 hover:bg-primary hover:text-primary-foreground transition-all duration-300 bg-transparent"
               asChild
             >
-              <a href="https://github.com/shinosuke" target="_blank" rel="noopener noreferrer">
+              <a href="https://github.com/Shinosuke24" target="_blank" rel="noopener noreferrer">
                 <Github className="w-5 h-5" />
                 View All Projects on GitHub
               </a>

@@ -22,18 +22,17 @@ import {
   MapPin,
   Volume2, 
   VolumeX, 
-  Play, 
-  Pause, 
   RotateCcw, // Ikon Repeat
 } from "lucide-react"
 
 export default function CVPage() {
   // === HANYA MENGGUNAKAN SATU ID VIDEO ===
+  // Ganti ID ini dengan video yang Anda inginkan
   const YOUTUBE_VIDEO_ID = "Sx5wp4J_oVc"; 
   
   // === STATE DAN REF UNTUK KONTROL AUDIO ===
+  // True = Muted (Implisit: Pause). Musik mulai dalam keadaan Mute dan Pause.
   const [isMuted, setIsMuted] = useState(true) 
-  const [isPlaying, setIsPlaying] = useState(false)
   const playerRef = useRef<HTMLIFrameElement>(null)
   // ===============================================
 
@@ -42,45 +41,28 @@ export default function CVPage() {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const [visibleElements, setVisibleElements] = useState<Set<string>>(new Set())
 
-  // === FUNGSI KONTROL MUTE/UNMUTE ===
+  // === FUNGSI KONTROL MUTE/UNMUTE & PLAY/PAUSE (DIGABUNG) ===
   const toggleMute = () => {
-    if (!isPlaying && playerRef.current) {
-      togglePlayPause(); // Panggil play agar browser mengizinkan perubahan volume
-    }
-
     setIsMuted((prev) => {
       const newMutedState = !prev
+      
       if (playerRef.current) {
+        // 1. Mengatur Volume (Mute/Unmute)
         playerRef.current.contentWindow?.postMessage(
           `{"event":"command","func":"setVolume","args":[${newMutedState ? 0 : 100}]}`,
           "*",
         )
+        
+        // 2. Mengatur Play/Pause (Jika Mute, maka Pause; Jika Unmute, maka Play)
+        const command = newMutedState ? "pauseVideo" : "playVideo";
+        playerRef.current.contentWindow?.postMessage(
+            `{"event":"command","func":"${command}","args":[]}`,
+            "*",
+        );
       }
       return newMutedState
     })
   }
-
-  // === FUNGSI KONTROL PLAY/PAUSE ===
-  const togglePlayPause = () => {
-    setIsPlaying((prev) => {
-        const newPlayingState = !prev;
-        if (playerRef.current) {
-            const command = newPlayingState ? "playVideo" : "pauseVideo";
-            playerRef.current.contentWindow?.postMessage(
-                `{"event":"command","func":"${command}","args":[]}`,
-                "*",
-            );
-            
-            if (newPlayingState && !isMuted) {
-                playerRef.current.contentWindow?.postMessage(
-                    `{"event":"command","func":"setVolume","args":[100]}`,
-                    "*",
-                );
-            }
-        }
-        return newPlayingState;
-    });
-  };
   
   // === FUNGSI REPLAY TRACK (Ulang dari Awal) ===
   const replayCurrentTrack = () => {
@@ -91,8 +73,8 @@ export default function CVPage() {
               "*",
           )
           
-          // Pastikan lagu berlanjut diputar
-          if (isPlaying) {
+          // Setelah replay, pastikan lagu diputar (jika tidak mute)
+          if (!isMuted) {
                playerRef.current.contentWindow?.postMessage(
                   `{"event":"command","func":"playVideo","args":[]}`,
                   "*",
@@ -123,7 +105,7 @@ export default function CVPage() {
     // Listener Pesan YouTube untuk Mengaktifkan Kontrol
     const onYouTubeIframeAPIReady = () => {
         if (playerRef.current) {
-             // Set volume 0 saat player siap
+             // Set volume 0 saat player siap (sesuai state awal isMuted = true)
              playerRef.current.contentWindow?.postMessage(
                 `{"event":"command","func":"setVolume","args":[0]}`, 
                 "*",
@@ -301,7 +283,7 @@ export default function CVPage() {
         <div className="fixed bottom-0 right-0 z-[0] w-[1px] h-[1px] opacity-0 overflow-hidden pointer-events-none">
             <iframe 
                ref={playerRef} 
-               // URL kembali ke satu lagu, dengan loop dan API
+               // URL untuk satu lagu, dengan loop dan API
                src={`https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?enablejsapi=1&loop=1&playlist=${YOUTUBE_VIDEO_ID}`} 
                title="YouTube background music player" 
                width="1" 
@@ -330,18 +312,18 @@ export default function CVPage() {
         <ThemeToggle />
       </div>
 
-      {/* Kontrol Musik di Kiri Navigasi - HANYA 3 TOMBOL */}
+      {/* Kontrol Musik di Kiri Navigasi - HANYA TOMBOL SPEAKER DAN REPLAY */}
       <div className="fixed top-4 left-20 z-50 flex space-x-2"> 
          
-         {/* TOMBOL PLAY/PAUSE */}
+         {/* TOMBOL MUTE/UNMUTE (SEKALIGUS PLAY/PAUSE) */}
          <Button 
             variant="ghost" 
             size="icon" 
-            onClick={togglePlayPause} 
+            onClick={toggleMute} 
             className="hover:scale-110 transition-transform duration-200"
-            title={isPlaying ? "Pause Music" : "Play Music"}
+            title={isMuted ? "Unmute & Play Music" : "Mute & Pause Music"}
         >
-            {isPlaying ? <Pause className="w-5 h-5 text-primary" /> : <Play className="w-5 h-5" />}
+            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5 text-primary" />}
         </Button>
         
         {/* TOMBOL REPLAY / REPEAT CURRENT TRACK */}
@@ -353,17 +335,6 @@ export default function CVPage() {
             title="Replay Current Track"
         >
             <RotateCcw className="w-5 h-5" />
-        </Button>
-         
-         {/* TOMBOL MUTE/UNMUTE */}
-         <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={toggleMute} 
-            className="hover:scale-110 transition-transform duration-200"
-            title={isMuted ? "Unmute Music" : "Mute Music"}
-        >
-            {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5 text-primary" />}
         </Button>
       </div>
 

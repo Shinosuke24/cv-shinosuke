@@ -255,7 +255,7 @@ export default function CVPage() {
     {
       school: "Gadjah Mada University",
       major: "Software Engineering",
-      period: "Juni 2021 - Mei 2024",
+      period: "Juni 2024 - 2027",
       description: "Currently pursuing a degree in Software Engineering, focusing on full-stack development, database management, and system architecture. Actively participating in campus organizations and independent projects to gain practical skills."
     },
   ];

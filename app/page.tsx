@@ -147,35 +147,35 @@ export default function CVPage() {
     {
       title: "CEO & Founder",
       company: "JK.Shinske",
-      period: "Apr 2020",
+      period: "Apr 2020 - Now",
       description: "Since 2020, I have independently built and led a Mobile Legends joki service, starting from small operations to becoming a trusted service for many players. Responsible for operational management, joki team, marketing strategies, and ensuring consistent service quality. This experience shaped my skills in business management, client relations, strategic decision-making, and deep understanding of the esports ecosystem.",
       logo: "/jkshinske-logo.png" 
     },
     {
       title: "Project Manager",
       company: "Toko Roti Wunoasari",
-      period: "Aug 2025",
+      period: "Aug 2025 - Dec 2025",
       description: "Employed as a project manager for a bakery located in the Wunoasari area.",
       logo: "/lion-logo.png"
     },
     {
       title: "Full Stack Developer",
       company: "PT. Lion Wings Indonesia",
-      period: "Sept 2025",
+      period: "Sept 2025 - Now",
       description: "Worked on developing a special website for admin purposes.",
       logo: "/lion-logo.png"
     },
     {
       title: "Sub Dealer",
       company: "PT. Samsung Electronics Indonesia",
-      period: "Jul 2025",
+      period: "Jul 2025 - Now",
       description: "Invited to attend a VIP meeting at a Singapore restaurant for the launch of Samsung Galaxy Z Fold 7 | Z Flip 7.",
       logo: "/samsung-logo.png"
     },
     {
       title: "Sub Dealer",
       company: "PT. Candii Jitu Indonesia",
-      period: "May 2025",
+      period: "May 2025 - Now",
       description: "Received an invitation to attend the Toshiba gathering event held at Ballroom Swissbell Hotel Solo.",
       logo: "/candii-jitu-logo.png"
     },
@@ -193,7 +193,7 @@ export default function CVPage() {
     {
       title: "IT Multimedia",
       company: "Humas UGM",
-      period: "Sept 2025",
+      period: "Sept 2025 - Now",
       description: "Participated in various trainings and courses in the UGM Public Relations Department, specifically in Multimedia. Topics included visual communication management, digital media, photography, videography, graphic design, and event documentation. This experience enhanced my skills in design, creative processes, and using technology for institutional information and branding.",
     },
   ];
@@ -203,7 +203,7 @@ export default function CVPage() {
     {
       title: "Member of Komatik UGM",
       company: "Software Research Development Division",
-      period: "Nov 2024",
+      period: "Nov 2024 - Now",
       description: "Active member of the Software Research Development Division at Komatik UGM, focusing on software innovation and research projects.",
     },
     {
@@ -221,13 +221,13 @@ export default function CVPage() {
     {
       title: "Staff of Porsenigama UGM",
       company: "IT Division",
-      period: "Aug 2025",
+      period: "Aug 2025 - Nov 2025",
       description: "Worked as staff in the IT Division for Porsenigama UGM, managing technical operations and digital systems."
     },
     {
       title: "Event Support Inauguration of Professor",
       company: "IT Multimedia",
-      period: "Sept 2025",
+      period: "Sept 2025 - Now",
       description: "Provided IT Multimedia support for the professor inauguration event.",
     },
     {
